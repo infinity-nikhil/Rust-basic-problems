@@ -1,0 +1,53 @@
+//Rust ko json samjh nahi aata, sirf struct samjh aata hai 
+//To json ko struct me convert karne ke liye Deserialize ka use karte hai 
+
+use serde::{Deserialize, Serialize};
+
+#[derive(Serialize, Deserialize)]
+struct Paragraph {
+    name: String
+}
+
+#[derive(Serialize, Deserialize)] //And struct ko bhi batana padta hai ki we are going to serialize or deserialize it  
+struct Article {
+    article: String,
+    author: String,
+    paragraph: Vec<Paragraph> 
+}
+//Ye thoda complex example hai ...like json ke andar bhi to array hote hai 
+//To waha ham log vector ka use karte hai .... 
+//In this case Article main json uske andar ek array jiska type = Paragrapgh and data type = string 
+
+fn main() {
+    //This is the json format ...and we want to convert it in above struct 
+    let json = r#"  
+    {
+    "article": "how to work with json in Rust",
+    "author": "akhil",
+    "paragraph": [
+        {
+        "name": "starting sentences"
+        },
+        {
+        "name": "body of the paragraph"
+        },
+        {
+        "name": "end of the paragraph"
+        }
+     ]
+    }
+    "#;
+
+    let parsed: Article = convert_json_to_struct(json);
+
+    println!("\n\n The name of the first para is : {}", parsed.paragraph[0].name);
+}
+
+//Now making of the function that will do the work 
+fn convert_json_to_struct(raw_json: &str) -> Article {
+    let parsed: Article = serde_json::from_str(raw_json).unwrap();
+    return parsed;
+}
+
+//Sara khel = this from_str and to_string ka hai from serde 
+//Simple concept -> Just pass the data and use these to they just convert it. 
