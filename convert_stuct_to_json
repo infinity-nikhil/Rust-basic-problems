@@ -1,0 +1,28 @@
+//Now we are converting struct to json 
+//Same concept used as earlier 
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize,Deserialize)]
+struct Family {
+    father: String,
+    mother: String,
+    son: String,
+    daughter: String,
+}
+
+fn main () {
+    let familiy_one = Family {
+        father: String::from("Job"),
+        mother: String::from("Job"),
+        daughter: String::from("School"),
+        son: String::from("collage"),
+    };
+
+    let parsed = convert_struct_to_json(&familiy_one);
+    println!("The json format of the struct is: {}", parsed);
+}
+
+fn convert_struct_to_json(raw_struct: &Family) -> String {
+    let parsed = serde_json::to_string(raw_struct).unwrap();
+    return parsed;
+}
